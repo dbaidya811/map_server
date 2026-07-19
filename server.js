@@ -60,20 +60,17 @@ app.post('/delete-data', (req, res) => {
         try {
             let data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
             
-            // 1. Find the entry we are deleting
             const itemToDelete = data[index];
             
-            // 2. Delete the physical image files from the system
             if (itemToDelete && itemToDelete.local_images) {
                 itemToDelete.local_images.forEach(imgPath => {
                     const fullImagePath = path.join(__dirname, imgPath);
                     if (fs.existsSync(fullImagePath)) {
-                        fs.unlinkSync(fullImagePath); // Deletes the file permanently
+                        fs.unlinkSync(fullImagePath); 
                     }
                 });
             }
 
-            // 3. Remove from JSON and save
             data.splice(index, 1); 
             fs.writeFileSync(filePath, JSON.stringify(data, null, 4), 'utf8');
             
@@ -98,6 +95,10 @@ app.post('/save-data', (req, res) => {
         if (!jsonFileName.endsWith('.json')) jsonFileName += '.json';
         const JSON_FILE_PATH = path.join(__dirname, jsonFileName);
 
+        // Extract first 4 characters of the filename and convert to uppercase for the ID prefix
+        const nameWithoutExt = jsonFileName.replace('.json', '');
+        const idPrefix = nameWithoutExt.substring(0, 4).toUpperCase();
+
         let newImagePaths = [];
         if (req.files && req.files.length > 0) {
             req.files.forEach(file => {
@@ -120,6 +121,7 @@ app.post('/save-data', (req, res) => {
         if (isEditing) {
             const idx = parseInt(editIndex);
             if (allData[idx]) {
+                // Retain the existing ID when editing
                 allData[idx].name = name || allData[idx].name;
                 allData[idx].description = description || allData[idx].description;
                 allData[idx].latitude = parseFloat(lat) || allData[idx].latitude;
@@ -131,7 +133,11 @@ app.post('/save-data', (req, res) => {
                 }
             }
         } else {
+            // Generate a unique ID for new entries
+            const uniqueId = `${idPrefix}_${Date.now()}`;
+            
             allData.push({
+                id: uniqueId,
                 name: name || `Pandal_${Date.now()}`,
                 description: description || "No description provided",
                 latitude: parseFloat(lat) || null,
