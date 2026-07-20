@@ -22,14 +22,13 @@ Once pushed to GitHub, this repository acts as a **Free API and CDN**, allowing 
 3. **Install Dependencies:**
    ```bash
    npm install express multer
-
-```
+   ```
 
 4. **Start the Server:**
-```bash
-npm start
+   ```bash
+   npm start
 
-```
+    ```
 
 
 *(Note: If `npm start` doesn't work, you can also run `node server.js`)*
