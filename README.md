@@ -52,8 +52,8 @@ Use this code in your frontend HTML/JS to fetch the data and display the images 
 
 ```javascript
 // 1. Define the API URLs
-const githubJsonUrl = '[https://raw.githubusercontent.com/dbaidya811/map_server/refs/heads/main/Must-visit.json](https://raw.githubusercontent.com/dbaidya811/map_server/refs/heads/main/Must-visit.json)';
-const githubBaseUrl = '[https://raw.githubusercontent.com/dbaidya811/map_server/refs/heads/main/](https://raw.githubusercontent.com/dbaidya811/map_server/refs/heads/main/)';
+const githubJsonUrl = 'https://raw.githubusercontent.com/dbaidya811/map_server/refs/heads/main/Must-visit.json';
+const githubBaseUrl = 'https://raw.githubusercontent.com/dbaidya811/map_server/refs/heads/main/';
 
 async function displayDataFromGitHub() {
     try {
