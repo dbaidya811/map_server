@@ -50,53 +50,72 @@ Once you add data via the local dashboard and push this project to GitHub, you c
 Use this code in your frontend HTML/JS to fetch the data and display the images dynamically. It automatically combines the base URL with the image paths saved in your JSON.
 
 ```javascript
-// 1. Define the API URLs
-const githubJsonUrl = 'https://raw.githubusercontent.com/dbaidya811/map_server/refs/heads/main/Must-visit.json';
+// 1. Define the base URL and the array of JSON filenames
 const githubBaseUrl = 'https://raw.githubusercontent.com/dbaidya811/map_server/refs/heads/main/';
 
-async function displayDataFromGitHub() {
-    try {
-        // 2. Fetch the JSON file from GitHub
-        const response = await fetch(githubJsonUrl);
-        if (!response.ok) throw new Error("Failed to fetch data!");
-        
-        const data = await response.json();
-        console.log(`Loaded ${data.length} locations from database.`);
+const jsonFiles = [
+    'Alipore_Port_area.json',
+    'Bidhannagar_s.json',
+    'Central_Kolkata.json',
+    'Must-visit.json',
+    'North_Kolkata.json',
+    'Northern_Suburb-Kolkata.json',
+    'South_Kolkata.json',
+    'Southern_Suburb_Kolkata.json'
+];
 
-        // 3. Loop through the data
-        data.forEach(pandal => {
-            console.log("Name:", pandal.name);
-            console.log("ID:", pandal.id);
-            console.log("Latitude:", pandal.latitude);
-            console.log("Longitude:", pandal.longitude);
+async function displayDataFromGitHub() {
+    // Loop through each JSON file in the array
+    for (const fileName of jsonFiles) {
+        const githubJsonUrl = githubBaseUrl + fileName;
+        console.log(`=== Fetching data from: ${fileName} ===`);
+
+        try {
+            // 2. Fetch the JSON file from GitHub
+            const response = await fetch(githubJsonUrl);
+            if (!response.ok) throw new Error(`Failed to fetch ${fileName}!`);
             
-            // 4. Check if this entry has any attached images
-            if (pandal.local_images && pandal.local_images.length > 0) {
-                pandal.local_images.forEach(imagePath => {
-                    
-                    // 5. Combine Base URL + image path to get the live image link
-                    const liveImageUrl = githubBaseUrl + imagePath;
-                    console.log("Live Image URL:", liveImageUrl);
-                    
-                    /* =========================================
-                       Example: How to render it in your HTML UI
-                       =========================================
-                       const img = document.createElement('img');
-                       img.src = liveImageUrl;
-                       img.style.width = '200px';
-                       document.body.appendChild(img);
-                    */
-                });
-            }
-            console.log("-----------------------------------");
-        });
-    } catch (error) {
-        console.error("Error loading data from GitHub API:", error);
+            const data = await response.json();
+            console.log(`Loaded ${data.length} locations from ${fileName}.`);
+
+            // 3. Loop through the locations data inside this JSON file
+            data.forEach(pandal => {
+                console.log("Name:", pandal.name);
+                console.log("ID:", pandal.id);
+                console.log("Latitude:", pandal.latitude);
+                console.log("Longitude:", pandal.longitude);
+                
+                // 4. Check if this entry has any attached images
+                if (pandal.local_images && pandal.local_images.length > 0) {
+                    pandal.local_images.forEach(imagePath => {
+                        
+                        // 5. Combine Base URL + image path to get the live image link
+                        // (Image folder structure inside repo will remain same)
+                        const liveImageUrl = githubBaseUrl + imagePath;
+                        console.log("Live Image URL:", liveImageUrl);
+                        
+                        /* =========================================
+                           Example: How to render it in your HTML UI
+                           =========================================
+                           const img = document.createElement('img');
+                           img.src = liveImageUrl;
+                           img.style.width = '200px';
+                           document.body.appendChild(img);
+                        */
+                    });
+                }
+                console.log("-----------------------------------");
+            });
+        } catch (error) {
+            console.error(`Error loading data from ${fileName}:`, error);
+        }
+        console.log(`\n===================================\n`); // Separator between files
     }
 }
 
 // Run the function
 displayDataFromGitHub();
+
 
 ```
 
