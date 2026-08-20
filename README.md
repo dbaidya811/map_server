@@ -26,7 +26,7 @@ Once pushed to GitHub, this repository acts as a **Free API and CDN**, allowing 
 
 4. **Start the Server:**
    ```bash
-   npm start
+   node server.js
 
     ```
 
