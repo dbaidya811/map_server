@@ -53,6 +53,9 @@ Use this code in your frontend HTML/JS to fetch the data and display the images 
 // 1. Define the base URL and the array of JSON filenames
 const githubBaseUrl = 'https://raw.githubusercontent.com/dbaidya811/map_server/refs/heads/main/';
 
+// signel page read
+ const oneFiles = 'one.json';
+
 const jsonFiles = [
     'Alipore_Port_area.json',
     'Bidhannagar_s.json',
